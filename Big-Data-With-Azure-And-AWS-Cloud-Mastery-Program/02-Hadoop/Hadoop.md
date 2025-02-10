@@ -300,3 +300,111 @@ It provides effective access to data for Big Data use cases, replicates the data
     - In the event of a failure of the **Active NameNode**, the **Standby NameNode** can take over its role with minimal downtime, ensuring **continuity of service** and **reducing the risk of data loss**.
 
 ![High-availablity_architecture.png](Images/High-availablity_architecture.png)
+
+### MapReduce Detailed Notes
+
+1. **Reading Data in HDFS**
+    
+    HDFS (Hadoop Distributed File System) is designed to store large datasets distributed across multiple nodes. Reading data in HDFS follows these steps:
+    
+    **3-Step Process:**
+    
+    - **Read Request Sent via Client:**  
+        The client sends a request to the HDFS NameNode to read the desired file.
+    - **Fetch Location of Data Nodes via NameNode:**  
+        The NameNode responds with metadata, i.e., the location of the data blocks stored on specific DataNodes.
+    - **Read/Retrieve Blocks from DataNodes:**  
+        The client connects to the respective DataNodes to fetch the required data blocks.
+    
+    **Difference Between HDFS and Cloud Storage:**
+    
+    - **HDFS:**  
+        Compute (processing) and storage are tightly coupled. Processing happens where the data resides (data locality).
+    - **Cloud Storage:**  
+        Compute and storage are loosely coupled, allowing for separate compute and storage resources.
+2. **MapReduce**
+    
+    MapReduce is a programming model and processing framework for large-scale distributed data processing.
+    
+    **Key Features of MapReduce:**
+    
+    - **Data Locality:**  
+        Instead of moving data to the computation, MapReduce moves computation to the data, reducing network latency.
+    - **Parallel Processing:**  
+        Processes data in parallel across multiple nodes.
+    
+    **Two Main Phases:**
+    **Mapper Phase:**
+    
+    - Processes input data and converts it into intermediate key-value pairs.
+    - Operates on input splits provided by HDFS.
+    - **Example:**  
+        **Input:** A file containing lines of text.  
+        **Mapper Output:**
+    
+	``` txt
+	("word1", 1) ("word2", 1)
+	```
+
+	 **Reducer Phase:**
+
+- Aggregates and combines the intermediate outputs produced by the mappers.
+- **Example:**  
+    **Reducer Input:**
+	``` txt
+	("word1", [1, 1, 1])  
+	("word2", [1, 1])
+	```
+	 
+	 **Output:**
+	``` txt
+	("word1", 3)  
+	("word2", 2)
+	```
+
+**Characteristics of MapReduce Jobs:**
+    
+    - Input and output files are represented as key-value pairs.
+    - A single CPU core processes one mapper job on one block of data.
+    - The number of Mappers in a job equals the number of HDFS blocks.
+
+**Components of a MapReduce Job**
+
+A MapReduce job consists of several components that work in sequence:
+
+- **Input Splits:**  
+    The data is divided into chunks called splits. Each split corresponds to an HDFS block processed by a single Mapper.
+    
+- **Mapper:**  
+    Processes the input split and generates key-value pairs as intermediate output.  
+    **Example:** For a word count problem, the Mapper processes each line of text and emits pairs like `("word", 1)`.
+    
+- **Combiner (Optional):**  
+    Acts as a mini-Reducer to optimize performance by combining the Mapper output locally on the same node, reducing data transfer during the shuffle phase.
+    
+- **Shuffle and Sort:**  
+    The intermediate key-value pairs are shuffled (grouped by key) and sorted to prepare for the Reduce phase.
+    
+- **Reducer:**  
+    Aggregates the shuffled and sorted data to produce the final output.  
+    
+ ### **YARN (Yet Another Resource Negotiator)**
+
+- **Hadoop 1 vs. Hadoop 2**:
+    - **Hadoop 1**: Combines resource management and data processing in a single framework.
+    - **Hadoop 2**: Separates resource management (YARN) from data processing, allowing for more flexibility and support for other types of jobs (e.g., Spark, Tez).
+        
+- **YARN Components**:
+    - **Resource Manager (RM)**: Manages resources across the cluster.
+    - **Application Master (AM)**: Manages the life-cycle of an application and negotiates resources with the RM.
+    - **Node Manager (NM)**: Manages resources on individual nodes.
+        
+- **YARN Workflow**:
+    
+    1. Application submission to RM.
+    2. RM allocates resources and launches the Application Master.
+    3. Application Master requests resources from RM.
+    4. RM allocates containers for task execution.
+    5. Application Master monitors task execution.
+    6. Upon completion, resources are released.
+    
