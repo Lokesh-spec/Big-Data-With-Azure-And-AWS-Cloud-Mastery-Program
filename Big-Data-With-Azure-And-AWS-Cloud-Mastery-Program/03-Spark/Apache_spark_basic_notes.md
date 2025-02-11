@@ -20,5 +20,3 @@ RDD (Resilient Distributed Dataset) is a fundamental data structure in Spark. Be
 - **Narrow Transformations:** Operations like `map`, `filter`, where data movement happens within partitions.
 - **Wide Transformations:** Operations like `groupByKey`, `reduceByKey` that cause data shuffling across partitions.
 
-## Code Snippets
-If you need the code extracted separately, let me know, and I’ll provide it as a Python script.
