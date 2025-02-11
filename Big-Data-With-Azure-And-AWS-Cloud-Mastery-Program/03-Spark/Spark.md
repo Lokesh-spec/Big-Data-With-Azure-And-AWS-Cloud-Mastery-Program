@@ -372,6 +372,8 @@ Common Transformations:
     Input: `[(a, 1), (b, 2), (a, 3), (b, 4)]`  
     Output: `[(a, 4), (b, 6)]`
 
+![ReduceByKey](Images/ReduceByKey.png)
+
 ---
 
 #### **2. GroupByKey**
@@ -388,6 +390,8 @@ Common Transformations:
 - **Example:**  
     Input: `[(a, 1), (b, 2), (a, 3), (b, 4)]`  
     Output: `[(a, [1, 3]), (b, [2, 4])]`
+
+![GroupByKey](Images/GroupByKey.png)
 
 ---
 
