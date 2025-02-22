@@ -1,1 +1,10 @@
 Big-Data-With-Azure-And-AWS-Cloud-Mastery-Program/01-BigDataFundamentals/Big Data Fundamentals.pdf
+
+
+# Ignore environment files
+.env
+.venv
+env/
+venv/
+*.env
+*.venv
